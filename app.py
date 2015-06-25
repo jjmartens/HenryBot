@@ -1,10 +1,9 @@
 import requests
 import time
 
-API_KEY = "<CENSORED>"
+API_KEY = "bot110574668:AAFWistE1uWqzrcqryg9U08FgYj7P94wBDo"
 
 def parse_response(json):
-    print json
     if 'text' in json['message']:
         if "geld" in json['message']['text']:
             requests.get("https://api.telegram.org/{}/sendMessage?chat_id={}&text=Geld?! je hebt nooit geen geld!".format(API_KEY, json['message']['chat']['id']))
