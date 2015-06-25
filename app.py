@@ -2,6 +2,7 @@ import requests
 import time
 import re
 import sqlalchemy
+import os
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
@@ -23,7 +24,7 @@ class Response(Base):
         return "<User(name='%s', fullname='%s', password='%s')>" % (
                              self.name, self.fullname, self.password)
 
-API_KEY = "<GECENSUREERD>"
+API_KEY = os.environ('HENRY_API_KEY')
 
 dict = {}
 def parse_response(json):
