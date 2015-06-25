@@ -13,7 +13,7 @@ def parse_response(json):
 
 
 def loop(id = 0):
-    data = requests.get("https://api.telegram.org/{}/getUpdates?offset={}&timeout=30".format(API_KEY, id))
+    data = requests.get("https://api.telegram.org/bot{}/getUpdates?offset={}&timeout=30".format(API_KEY, id))
     json = data.json()
     result = json['result']
     if len(result) > 0:
