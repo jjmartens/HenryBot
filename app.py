@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy import Column, Integer, String
 
-engine = create_engine('mysql://root:@localhost/henry', pool_recycle=3600)
+engine = create_engine('mysql://root:@localhost/henry?charset=utf8', pool_recycle=3600,encoding='utf-8')
 Base = declarative_base()
 session = Session(engine)
 class Response(Base):
@@ -41,12 +41,14 @@ def parse_response(json):
                     session.commit()
         for key in dict.keys():
             if key in json['message']['text']:
-                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], dict[key]))
+                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], dict[key].encode('utf8')))
 
 
 def loop(id = 0):
     data = requests.get("https://api.telegram.org/bot{}/getUpdates?offset={}&timeout=30".format(API_KEY, id))
-    json = data.json()
+    print data
+    data.encoding = 'utf8'
+    json = data.json(encoding='utf8')
     result = json['result']
     if len(result) > 0:
         id = result[0]['update_id']
