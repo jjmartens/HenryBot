@@ -20,7 +20,7 @@ def loop(id = 0):
     if len(result) > 0:
         id = result[0]['update_id']
         parse_response(result[0])
-    time.sleep(1)
+    time.sleep(0.2)
     loop(id + 1)
 
 if __name__ == '__main__':
