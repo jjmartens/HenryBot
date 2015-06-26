@@ -39,9 +39,20 @@ def parse_response(json):
                     dict[pattern] = answer
                     session.add(Response(pattern,answer))
                     session.commit()
-        for key in dict.keys():
-            if key in json['message']['text']:
-                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], dict[key].encode('utf8')))
+            if match.group(1) == "henry":
+                if match.group(2) == "delete":
+                    if match.group(3) in dict.keys():
+                        dict.pop(match.group(3))
+                        responses = session.query(Response).filter_by(trigger=match.group(3)).all()
+                        for res in responses:
+                            session.delete(res)
+                        session.commit()
+                elif match.group(2) == "dump":
+                    requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], ",".join(map(str,dict.keys())).encode('utf8')))
+        else:
+            for key in dict.keys():
+                if key in json['message']['text']:
+                    requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], dict[key].encode('utf8')))
 
 
 def loop(id = 0):
