@@ -30,7 +30,7 @@ API_KEY = os.environ['HENRY_API_KEY']
 dict = {}
 def parse_response(json):
     if 'text' in json['message']:
-        match = re.search(r'(\w+):(\.+):(.+)', json['message']['text'])
+        match = re.search(r'(\w+):[^:]:(.+)', json['message']['text'])
         if match is not None:
             if(match.group(1) == "add"):
                 match.group(2).capitalize()
