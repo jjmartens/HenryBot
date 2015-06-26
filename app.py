@@ -51,9 +51,8 @@ def parse_response(json):
                     requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], ",".join(map(str,dict.keys())).encode('utf8')))
         else:
             answer = ""
-
             for key in dict.keys():
-                if key.capitalize() in json['message']['text'].capitalize():
+                if key.upper() in json['message']['text'].upper():
                     answer += dict[key]
                     answer += "\n"
 
