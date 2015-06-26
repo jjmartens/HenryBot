@@ -54,11 +54,13 @@ def loop(id = 0):
         id = result[0]['update_id']
         parse_response(result[0])
     time.sleep(0.2)
-    loop(id + 1)
+    return id
 
 if __name__ == '__main__':
     q = session.query(Response).all()
     for response in q:
         dict[response.trigger] = response.response
-    loop()
+    id = 0
+    while True:
+        id = loop(id)
 
