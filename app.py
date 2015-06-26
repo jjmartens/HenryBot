@@ -42,7 +42,6 @@ def parse_response(json):
             if match.group(1) == "henry":
                 if match.group(2) == "delete":
                     if match.group(3) in dict.keys():
-                        match.group(3).capitalize()
                         dict.pop(match.group(3))
                         responses = session.query(Response).filter_by(trigger=match.group(3)).all()
                         for res in responses:
@@ -56,6 +55,7 @@ def parse_response(json):
                 if key.capitalize() in json['message']['text'].capitalize():
                     answer += dict[key].encode('utf-8')
                     answer += "\n"
+            answer = answer[:-1]
             requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer))
 
 
