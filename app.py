@@ -30,16 +30,16 @@ API_KEY = os.environ['HENRY_API_KEY']
 dict = {}
 def parse_response(json):
     if 'text' in json['message']:
-        match = re.search(r'(\w+):[^:]:(.+)', json['message']['text'])
+        match = re.search(r'(\w+):([^:]+):(.+)', json['message']['text'])
         if match is not None:
             if(match.group(1) == "add"):
-                pattern = str(match.group(2))
+                pattern = match.group(2)
                 answer = match.group(3)
-                if len(pattern) >= 2:
+                if len(pattern) > 2:
                     dict[pattern] = answer
                     session.add(Response(pattern,answer))
                     session.commit()
-            if match.group(1) == "henry":
+            elif match.group(1) == "henry":
                 if match.group(2) == "delete":
                     if match.group(3) in dict.keys():
                         dict.pop(match.group(3))
@@ -51,12 +51,14 @@ def parse_response(json):
                     requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], ",".join(map(str,dict.keys())).encode('utf8')))
         else:
             answer = ""
+
             for key in dict.keys():
                 if key.capitalize() in json['message']['text'].capitalize():
-                    answer += dict[key].encode('utf-8')
+                    answer += dict[key]
                     answer += "\n"
-            answer = answer[:-1]
-            requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer))
+
+            if answer != "":
+                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer.encode('utf8')))
 
 
 def loop(id = 0):
@@ -76,5 +78,3 @@ if __name__ == '__main__':
     id = 0
     while True:
         id = loop(id) + 1
-    time.sleep(0.2)
-
