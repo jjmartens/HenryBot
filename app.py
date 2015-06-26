@@ -33,8 +33,7 @@ def parse_response(json):
         match = re.search(r'(\w+):[^:]:(.+)', json['message']['text'])
         if match is not None:
             if(match.group(1) == "add"):
-                match.group(2).capitalize()
-                pattern = match.group(2)
+                pattern = str(match.group(2))
                 answer = match.group(3)
                 if len(pattern) >= 2:
                     dict[pattern] = answer
@@ -53,9 +52,11 @@ def parse_response(json):
                     requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], ",".join(map(str,dict.keys())).encode('utf8')))
         else:
             for key in dict.keys():
-                if key in json['message']['text'].capitalize():
-                    requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], dict[key].encode('utf8')))
-                    return
+                answer = ""
+                if key.capitalize() in json['message']['text'].capitalize():
+                    answer += dict[key].encode('utf-8')
+                    answer += "\n"
+            requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer))
 
 
 def loop(id = 0):
