@@ -63,11 +63,12 @@ def parse_response(json):
 def loop(id = 0):
     data = requests.get("https://api.telegram.org/bot{}/getUpdates?offset={}&timeout=30".format(API_KEY, id))
     data.encoding = 'utf8'
-    json = data.json(encoding='utf8')
-    result = json['result']
-    if len(result) > 0:
-        id = result[0]['update_id']
-        parse_response(result[0])
+    if data is not None:
+        json = data.json(encoding='utf8')
+        result = json['result']
+        if len(result) > 0:
+            id = result[0]['update_id']
+            parse_response(result[0])
     return id
 
 if __name__ == '__main__':
