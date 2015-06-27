@@ -41,9 +41,10 @@ def parse_response(json):
                     session.commit()
             elif match.group(1) == "henry":
                 if match.group(2) == "delete":
-                    if match.group(3) in dict.keys():
-                        dict.pop(match.group(3))
-                        responses = session.query(Response).filter_by(trigger=match.group(3)).all()
+                    pattern = match.group(3)[:-1]
+                    if pattern in dict.keys():
+                        dict.pop(pattern)
+                        responses = session.query(Response).filter_by(trigger=pattern).all()
                         for res in responses:
                             session.delete(res)
                         session.commit()
