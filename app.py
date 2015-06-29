@@ -28,6 +28,16 @@ class Response(Base):
 API_KEY = os.environ['HENRY_API_KEY']
 
 dict = {}
+
+def parse_message(msg, data):
+    if 'username' in data['message']['from']:
+        username = "@" + data['message']['from']['username']
+    elif 'first_name' in data['message']['from']:
+        username = data['message']['from']['first_name']
+    else:
+        username = 'Unknown'
+    return msg.replace("{user}", username)
+
 def parse_response(json):
     if 'text' in json['message']:
         match = re.search(r'(\w+):([^:]+):(.+)', json['message']['text'])
@@ -59,7 +69,7 @@ def parse_response(json):
                     answer += "\n"
 
             if answer != "":
-                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer.replace("{user}", "@" + json['message']['from']['username']).encode('utf8')))
+                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], parse_message(answer,json).encode('utf8')))
 
 
 def loop(id = 0):
