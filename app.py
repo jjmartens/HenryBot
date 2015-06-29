@@ -36,8 +36,8 @@ def parse_response(json):
                 pattern = match.group(2)
                 answer = match.group(3)
                 if len(pattern) > 2:
-                    dict[pattern] = answer
-                    session.add(Response(pattern,answer))
+                    dict[pattern.upper()] = answer
+                    session.add(Response(pattern.upper(),answer))
                     session.commit()
             elif match.group(1) == "henry":
                 if match.group(2) == "delete":
