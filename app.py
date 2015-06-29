@@ -59,7 +59,7 @@ def parse_response(json):
                     answer += "\n"
 
             if answer != "":
-                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer.encode('utf8')))
+                requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], answer.replace("{user}", json['message']['from']['username']).encode('utf8')))
 
 
 def loop(id = 0):
