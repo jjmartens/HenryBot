@@ -50,7 +50,7 @@ def parse_response(json):
                             session.delete(res)
                         session.commit()
                 elif match.group(2) == "dump":
-                    requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], ",".join(map(str,dict.keys())).encode('utf8')))
+                    requests.get("https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(API_KEY, json['message']['chat']['id'], "\n".join(map(str,dict.keys())).encode('utf8')))
         else:
             answer = ""
             for key in dict.keys():
