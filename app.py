@@ -42,8 +42,9 @@ def parse_response(json):
             elif match.group(1) == "henry":
                 if match.group(2) == "delete":
                     pattern = match.group(3)[:-1]
-                    if pattern in dict.keys():
-                        dict.pop(pattern)
+                    pattern_capi = pattern.upper()
+                    if pattern_capi in dict.keys():
+                        dict.pop(pattern_capi)
                         responses = session.query(Response).filter_by(trigger=pattern).all()
                         for res in responses:
                             session.delete(res)
@@ -75,7 +76,7 @@ def loop(id = 0):
 if __name__ == '__main__':
     q = session.query(Response).all()
     for response in q:
-        dict[response.trigger] = response.response
+        dict[response.trigger.upper()] = response.response
     id = 0
     while True:
         id = loop(id) + 1
