@@ -66,7 +66,7 @@ def parse_response(json):
             for key in dict.keys():
                 rex = re.escape(key) + r'+(([?!.,:;]*$)|((\s.*)+))'
                 match = re.search(rex, json['message']['text'].upper(), re.IGNORECASE)
-                if match
+                if match:
                     answer += dict[key]
                     answer += "\n"
 
