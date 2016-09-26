@@ -93,3 +93,16 @@ if __name__ == '__main__':
     id = 0
     while True:
         id = loop(id) + 1
+     
+from random import randint
+from imgurpython import ImgurClient
+
+def get_random_spongebob():
+    client_id = 'dac6c4014f7abd0'
+    client_secret = ''
+    client = ImgurClient(client_id, client_secret)
+
+    images = client.get_album_images('4ybk7')
+    random_img = images[randint(0, len(images) - 1)]
+    print(random_img.link)
+
