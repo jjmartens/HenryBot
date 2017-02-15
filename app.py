@@ -39,6 +39,8 @@ def parse_message(msg, data):
     return msg.replace("{user}", username)
 
 def parse_response(json):
+    if 'message' not in json:
+        return
     if 'text' in json['message']:
         match = re.search(r'(\w+):([^:]+):(.+)', json['message']['text'])
         if match is not None:
@@ -79,7 +81,10 @@ def loop(id = 0):
     data = requests.get("https://api.telegram.org/bot{}/getUpdates?offset={}&timeout=30".format(API_KEY, id))
     data.encoding = 'utf8'
     if data is not None:
-        json = data.json(encoding='utf8')
+        try:
+          json = data.json(encoding='utf8')
+        except:
+          return id
         result = json['result']
         if len(result) > 0:
             id = result[0]['update_id']
